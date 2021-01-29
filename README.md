@@ -6,7 +6,11 @@ This action deletes branches that havent had a commit in the last X days
 
 ### `numDays`
 
-**Required** The number of days after which the branches will be deleted. Default `180`.
+The number of days after which the branches will be deleted.
+
+Required | Default
+-------- | -------
+False | 180
 
 ## Example Usage
 
