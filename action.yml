@@ -1,0 +1,15 @@
+name: 'Git Cleanup'
+description: 'delete old branches and PRs from repo'
+inputs:
+  numDays:
+    description: 'Number of days after which branches are deleted'
+    required: false
+    default: '180'
+outputs:
+  branches:
+    description: 'The branches picked up by the action'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.numDays }}
