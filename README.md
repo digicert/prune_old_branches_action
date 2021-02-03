@@ -1,6 +1,7 @@
 # Delete Old Branches
 
-This action deletes branches that haven't had a commit in the last X days, and delets the oldest tags
+This action deletes branches that haven't had a commit in the last X days, and deletes the oldest tags.
+
 DO NOT USE v3 as it has a bug
 
 ## Requirements
