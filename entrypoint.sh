@@ -11,7 +11,7 @@ do
     export IFS=$' '
     elements=($i)
     
-    if [ $TIME -lt ${elements[1]} ]
+    if [ $TIME -gt ${elements[1]} ]
     then
         export IFS="/"
 	    inner_elements=(${elements[0]})

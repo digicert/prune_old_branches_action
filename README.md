@@ -1,6 +1,7 @@
 # Delete Old Branches
 
-This action deletes branches that haven't had a commit in the last X days.
+This action deletes branches that haven't had a commit in the last X days, and delets the oldest tags
+DO NOT USE v3 as it has a bug
 
 ## Requirements
 
@@ -16,6 +17,14 @@ Required | Default
 -------- | -------
 False | 180
 
+### `numTags`
+
+The number of most recent tags. (Set to 0 to delete all tags)
+
+Required | Default
+-------- | -------
+False | 5
+
 ## Example Usage
 ```yaml
 steps:
@@ -28,4 +37,5 @@ steps:
     uses: digicert/prune_old_branches_action@v1
     with:
       numDays: '200'
+      numTags: '3'
 ```
