@@ -5,6 +5,10 @@ inputs:
     description: 'Number of days after which branches are deleted'
     required: false
     default: '180'
+  numTags:
+    description: 'Number of tags to be kept (sorted by tag date) pass 0 to delete all tags'
+    required: false
+    default: '5'
 outputs:
   branches:
     description: 'The branches picked up by the action'
@@ -13,3 +17,4 @@ runs:
   image: 'Dockerfile'
   args:
     - ${{ inputs.numDays }}
+    - ${{ inputs.numTags }}
