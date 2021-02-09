@@ -24,7 +24,7 @@ export IFS=$'\n'
 
 #loop for deleting old tags
 TO_SKIP=$2
-for n in $(git tag --sort=-committerdate)
+for n in $(git tag --sort=-creatordate)
 do
     if [ $TO_SKIP -gt 0 ]
     then
