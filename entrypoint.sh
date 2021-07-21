@@ -26,7 +26,7 @@ export IFS=$'\n'
 TO_SKIP=$2
 for n in $(git tag --sort=-creatordate)
 do
-    if [ $TO_SKIP -gt 0 ]
+    if [[ $TO_SKIP -gt 0 ]] && [[ $n == v* ]]
     then
         TO_SKIP=$(( $TO_SKIP-1 ))
     else
