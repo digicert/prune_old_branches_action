@@ -9,6 +9,10 @@ inputs:
     description: 'Number of tags to be kept (sorted by tag date) pass 0 to delete all tags'
     required: false
     default: '5'
+  skipTags:
+    description: 'The sting start with Tag to be skipped'
+    required: false
+    default: ''
 outputs:
   branches:
     description: 'The branches picked up by the action'
@@ -18,3 +22,4 @@ runs:
   args:
     - ${{ inputs.numDays }}
     - ${{ inputs.numTags }}
+    - ${{ inputs.skipTags }}
