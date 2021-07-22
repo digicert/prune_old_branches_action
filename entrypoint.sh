@@ -10,7 +10,7 @@ for i in $(git for-each-ref refs/remotes/origin --sort=committerdate  --format='
 do
     export IFS=$' '
     elements=($i)
-    
+
     if [ $TIME -gt ${elements[1]} ]
     then
         export IFS="/"
@@ -26,12 +26,17 @@ export IFS=$'\n'
 TO_SKIP=$2
 for n in $(git tag --sort=-creatordate)
 do
-    if [[ $TO_SKIP -gt 0 ]] && [[ $n == v* ]]
+    if [ $TO_SKIP -gt 0 ]
     then
         TO_SKIP=$(( $TO_SKIP-1 ))
     else
-        git push origin --delete refs/tags/$n
-        OUT="${OUT}, ${n}"
+        if [[ "$n" != "$3"* ]] ## $3 is optional, for ex,tag starts with v
+        then
+            git push origin --delete refs/tags/$n
+            OUT="${OUT}, ${n}"
+        else
+            echo "skip deleting $n"
+        fi
     fi
 done
 
