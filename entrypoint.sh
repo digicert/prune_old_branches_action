@@ -1,5 +1,7 @@
 #!/bin/bash
 
+git config --global --add safe.directory /github/workspace
+
 export IFS=$'\n'
 SECONDS=$((86400*$1))
 TIME=$(($(date +%s)-$SECONDS))
