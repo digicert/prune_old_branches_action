@@ -26,6 +26,13 @@ Required | Default
 -------- | -------
 False | 5
 
+### `skipTags`
+
+The number of most recent tags. (Set to 0 to delete all tags)
+
+Required | Default
+-------- | -------
+False | null
 ## Example Usage
 ```yaml
 steps:
@@ -39,4 +46,5 @@ steps:
     with:
       numDays: '200'
       numTags: '3'
+      skipTags: 'v'  #optional
 ```
