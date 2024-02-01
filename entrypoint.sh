@@ -16,7 +16,7 @@ do
     then
         export IFS="/"
 	    inner_elements=(${elements[0]})
-        if [ ${inner_elements[1]} -ne "origin/KEEP"* ]
+        if [ ${inner_elements[1]} -ne "KEEP"* ]
         then
             git push origin --delete ${inner_elements[1]}
             #echo ${inner_elements[1]}
