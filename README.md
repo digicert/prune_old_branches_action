@@ -8,6 +8,10 @@ DO NOT USE v3 as it has a bug
 
 Requires the repo to be checked out, this can be done with the actions/checkout@v2 action on the marketplace
 
+## KEEP Branches
+
+Adding `KEEP` to the beginning of a branch name will bypass deleting the branch.
+
 ## Inputs
 
 ### `numDays`
