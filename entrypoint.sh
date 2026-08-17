@@ -10,7 +10,7 @@ TIME=$(($(date +%s) - $SECONDS))
 OUT=""
 
 # Optional 4th argument: dry-run
-DRY_RUN="${4:-false}"
+DRY_RUN="${4:-true}"
 
 delete_branch() {
     if [[ "$DRY_RUN" == "true" ]]; then
