@@ -13,11 +13,11 @@ inputs:
     description: 'Tag prefix to skip deleting (e.g. "v" to keep version tags)'
     required: false
     default: ''
-  dry_run:
+  dryRun:
     description: 'Dry run - do not delete anything'
     required: false
     type: boolean
-    default: true    
+    default: true
 outputs:
   branches:
     description: 'The branches picked up by the action'

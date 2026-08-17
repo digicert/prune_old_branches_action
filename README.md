@@ -40,7 +40,7 @@ Default value is true.
 
 Required | Default
 -------- | -------
-False | null
+False | true
 ## Example Usage
 ```yaml
 steps:
