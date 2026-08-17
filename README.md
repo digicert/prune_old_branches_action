@@ -32,7 +32,7 @@ False | 5
 
 ### `skipTags`
 
-The number of most recent tags. (Set to 0 to delete all tags)
+Tags with this prefix will be skipped from deletion.
 
 ### `dryRun`
 
