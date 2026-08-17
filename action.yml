@@ -10,7 +10,7 @@ inputs:
     required: false
     default: '5'
   skipTags:
-    description: 'The sting start with Tag to be skipped'
+    description: 'Tag prefix to skip deleting (e.g. "v" to keep version tags)'
     required: false
     default: ''
   dry_run:
