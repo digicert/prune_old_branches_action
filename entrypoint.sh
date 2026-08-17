@@ -17,9 +17,12 @@ do
     then
         export IFS="/"
 	    inner_elements=(${elements[0]})
-        git push origin --delete ${inner_elements[1]}
-        #echo ${inner_elements[1]}
-        OUT="${OUT}, ${inner_elements[1]}"
+        if [[ ${inner_elements[1]} != "KEEP"* ]]
+        then
+            git push origin --delete ${inner_elements[1]}
+            # echo ${inner_elements[1]}
+            OUT="${OUT}, ${inner_elements[1]}"
+        fi
     fi
 done
 export IFS=$'\n'
