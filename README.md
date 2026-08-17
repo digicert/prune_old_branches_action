@@ -34,6 +34,10 @@ False | 5
 
 The number of most recent tags. (Set to 0 to delete all tags)
 
+### `dryRun`
+
+Default value is true.
+
 Required | Default
 -------- | -------
 False | null
@@ -51,4 +55,5 @@ steps:
       numDays: '200'
       numTags: '3'
       skipTags: 'v'  #optional
+      dryRun: true
 ```

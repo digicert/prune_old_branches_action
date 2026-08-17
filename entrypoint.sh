@@ -3,41 +3,71 @@
 git config --global --add safe.directory /github/workspace
 
 export IFS=$'\n'
-SECONDS=$((86400*$1))
-TIME=$(($(date +%s)-$SECONDS))
+
+SECONDS=$((86400 * $1))
+TIME=$(($(date +%s) - $SECONDS))
 
 OUT=""
-#loop for deleting old branches
-for i in $(git for-each-ref refs/remotes/origin --sort=committerdate  --format='%(HEAD)%(color:yellow)%(refname:short)%(color:reset) %(color:green)%(committerdate:raw)%(color:reset)')
+
+# Optional 4th argument: dry-run
+DRY_RUN="${4:-false}"
+
+delete_branch() {
+    if [[ "$DRY_RUN" == "true" ]]; then
+        echo "[DRY-RUN] Would delete branch: $1"
+    else
+        git push origin --delete "$1"
+    fi
+}
+
+delete_tag() {
+    if [[ "$DRY_RUN" == "true" ]]; then
+        echo "[DRY-RUN] Would delete tag: $1"
+    else
+        git push origin --delete "refs/tags/$1"
+    fi
+}
+
+# Loop for deleting old branches
+for i in $(git for-each-ref refs/remotes/origin --sort=committerdate \
+    --format='%(HEAD)%(color:yellow)%(refname:short)%(color:reset) %(color:green)%(committerdate:raw)%(color:reset)')
 do
     export IFS=$' '
     elements=($i)
 
-    if [ $TIME -gt ${elements[1]} ]
+    if [ "$TIME" -gt "${elements[1]}" ]
     then
         export IFS="/"
-	    inner_elements=(${elements[0]})
+        inner_elements=(${elements[0]})
+
         if [[ ${inner_elements[1]} != "KEEP"* ]]
         then
-            git push origin --delete ${inner_elements[1]}
-            # echo ${inner_elements[1]}
-            OUT="${OUT}, ${inner_elements[1]}"
+            branch="${inner_elements[1]}"
+
+            delete_branch "$branch"
+
+            OUT="${OUT}, ${branch}"
         fi
     fi
 done
+
 export IFS=$'\n'
 
-#loop for deleting old tags
+# Loop for deleting old tags
 TO_SKIP=$2
+SKIP_PREFIX="${3:-}"
+
 for n in $(git tag --sort=-creatordate)
 do
-    if [ $TO_SKIP -gt 0 ]
+    if [ "$TO_SKIP" -gt 0 ]
     then
-        TO_SKIP=$(( $TO_SKIP-1 ))
+        TO_SKIP=$((TO_SKIP - 1))
     else
-        if [[ "$n" != "$3"* ]] ## $3 is optional, for ex,tag starts with v
+        # Empty SKIP_PREFIX means no filtering
+        if [[ -z "$SKIP_PREFIX" || "$n" != "$SKIP_PREFIX"* ]]
         then
-            git push origin --delete refs/tags/$n
+            delete_tag "$n"
+
             OUT="${OUT}, ${n}"
         else
             echo "skip deleting $n"
@@ -45,5 +75,5 @@ do
     fi
 done
 
-echo ${OUT}
+echo "${OUT}"
 echo "::set-output name=branches::$OUT"

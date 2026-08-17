@@ -13,6 +13,11 @@ inputs:
     description: 'The sting start with Tag to be skipped'
     required: false
     default: ''
+  dry_run:
+    description: 'Dry run - do not delete anything'
+    required: false
+    type: boolean
+    default: true    
 outputs:
   branches:
     description: 'The branches picked up by the action'
@@ -23,3 +28,4 @@ runs:
     - ${{ inputs.numDays }}
     - ${{ inputs.numTags }}
     - ${{ inputs.skipTags }}
+    - ${{ inputs.dryRun }}
