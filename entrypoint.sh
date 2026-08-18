@@ -16,23 +16,29 @@ SECONDS=$((86400 * $1))
 TIME=$(($(date +%s) - $SECONDS))
 
 OUT=""
+FAILED=0
 
 # Optional 4th argument: dry-run
 DRY_RUN="${4:-true}"
 
+# Returns non-zero if a real deletion was attempted and failed, so callers can skip recording it.
 delete_branch() {
-    # Only an explicit "false" enables real deletion; anything else stays dry-run.
     if [[ "${DRY_RUN,,}" == "false" ]]; then
-        git push origin --delete "$1"
+        if ! git push origin --delete "$1"; then
+            echo "Error: failed to delete branch: $1" >&2
+            return 1
+        fi
     else
         echo "[DRY-RUN] Would delete branch: $1"
     fi
 }
 
 delete_tag() {
-    # Only an explicit "false" enables real deletion; anything else stays dry-run.
     if [[ "${DRY_RUN,,}" == "false" ]]; then
-        git push origin --delete "refs/tags/$1"
+        if ! git push origin --delete "refs/tags/$1"; then
+            echo "Error: failed to delete tag: $1" >&2
+            return 1
+        fi
     else
         echo "[DRY-RUN] Would delete tag: $1"
     fi
@@ -54,9 +60,11 @@ do
         then
             branch="${inner_elements[1]}"
 
-            delete_branch "$branch"
-
-            OUT="${OUT}, ${branch}"
+            if delete_branch "$branch"; then
+                OUT="${OUT}, ${branch}"
+            else
+                FAILED=$((FAILED + 1))
+            fi
         fi
     fi
 done
@@ -76,9 +84,11 @@ do
         # Empty SKIP_PREFIX means no filtering
         if [[ -z "$SKIP_PREFIX" || "$n" != "$SKIP_PREFIX"* ]]
         then
-            delete_tag "$n"
-
-            OUT="${OUT}, ${n}"
+            if delete_tag "$n"; then
+                OUT="${OUT}, ${n}"
+            else
+                FAILED=$((FAILED + 1))
+            fi
         else
             echo "skip deleting $n"
         fi
@@ -87,3 +97,8 @@ done
 
 echo "${OUT}"
 echo "::set-output name=branches::$OUT"
+
+if [ "$FAILED" -gt 0 ]; then
+    echo "Error: $FAILED deletion(s) failed" >&2
+    exit 1
+fi
