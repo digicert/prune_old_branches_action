@@ -2,6 +2,14 @@
 
 git config --global --add safe.directory /github/workspace
 
+# Reject anything but plain integers before they hit arithmetic contexts (prevents injection).
+for arg in "$1" "$2"; do
+    if ! [[ "$arg" =~ ^[0-9]+$ ]]; then
+        echo "Error: numDays and numTags must be non-negative integers, got: $arg" >&2
+        exit 1
+    fi
+done
+
 export IFS=$'\n'
 
 SECONDS=$((86400 * $1))
@@ -13,18 +21,20 @@ OUT=""
 DRY_RUN="${4:-true}"
 
 delete_branch() {
-    if [[ "$DRY_RUN" == "true" ]]; then
-        echo "[DRY-RUN] Would delete branch: $1"
-    else
+    # Only an explicit "false" enables real deletion; anything else stays dry-run.
+    if [[ "${DRY_RUN,,}" == "false" ]]; then
         git push origin --delete "$1"
+    else
+        echo "[DRY-RUN] Would delete branch: $1"
     fi
 }
 
 delete_tag() {
-    if [[ "$DRY_RUN" == "true" ]]; then
-        echo "[DRY-RUN] Would delete tag: $1"
-    else
+    # Only an explicit "false" enables real deletion; anything else stays dry-run.
+    if [[ "${DRY_RUN,,}" == "false" ]]; then
         git push origin --delete "refs/tags/$1"
+    else
+        echo "[DRY-RUN] Would delete tag: $1"
     fi
 }
 
