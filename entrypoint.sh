@@ -53,13 +53,16 @@ do
 
     if [ "$TIME" -gt "${elements[1]}" ]
     then
-        export IFS="/"
-        inner_elements=(${elements[0]})
+        # refname:short for the "origin/HEAD" symbolic ref resolves to just
+        # "origin" (no "/"); skip it, it is not a real branch.
+        [[ "${elements[0]}" == */* ]] || continue
 
-        if [[ ${inner_elements[1]} != "KEEP"* ]]
+        # Strip only the leading "<remote>/" segment so branch names with
+        # additional "/" (e.g. feature/login) are kept intact.
+        branch="${elements[0]#*/}"
+
+        if [[ "$branch" != "KEEP"* ]]
         then
-            branch="${inner_elements[1]}"
-
             if delete_branch "$branch"; then
                 OUT="${OUT}, ${branch}"
             else
