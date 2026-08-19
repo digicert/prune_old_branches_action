@@ -102,6 +102,5 @@ echo "${OUT}"
 echo "::set-output name=branches::$OUT"
 
 if [ "$FAILED" -gt 0 ]; then
-    echo "Error: $FAILED deletion(s) failed" >&2
-    exit 1
+    echo "Warning: $FAILED deletion(s) failed" >&2
 fi
