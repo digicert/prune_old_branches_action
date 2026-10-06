@@ -9,6 +9,14 @@ inputs:
     description: 'Number of tags to be kept (sorted by tag date) pass 0 to delete all tags'
     required: false
     default: '5'
+  skipTags:
+    description: 'Tag prefix to skip deleting (e.g. "v" to keep version tags)'
+    required: false
+    default: ''
+  dryRun:
+    description: 'Dry run - do not delete anything'
+    required: false
+    default: 'true'
 outputs:
   branches:
     description: 'The branches picked up by the action'
@@ -18,3 +26,5 @@ runs:
   args:
     - ${{ inputs.numDays }}
     - ${{ inputs.numTags }}
+    - ${{ inputs.skipTags }}
+    - ${{ inputs.dryRun }}

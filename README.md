@@ -30,6 +30,17 @@ Required | Default
 -------- | -------
 False | 5
 
+### `skipTags`
+
+Tags with this prefix will be skipped from deletion.
+
+### `dryRun`
+
+Default value is 'true'.
+
+Required | Default
+-------- | -------
+False | 'true'
 ## Example Usage
 ```yaml
 steps:
@@ -43,4 +54,6 @@ steps:
     with:
       numDays: '200'
       numTags: '3'
+      skipTags: 'v'  #optional
+      dryRun: 'true'
 ```
